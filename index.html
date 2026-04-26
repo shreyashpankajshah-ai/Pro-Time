@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProTime | Advanced Scheduler</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <h1 class="loader-text" id="loaderText">SYNCHRONIZING...</h1>
+    </div>
+
+    <main class="dashboard hidden" id="dashboard">
+        <nav class="sidebar">
+            <div class="logo">⚡ ProTime</div>
+            <ul class="nav-links">
+                <li class="active">📊 Dashboard</li>
+                <li>📅 Timeline</li>
+                <li>📈 Analytics</li>
+                <li>⚙️ Settings</li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <header class="header">
+                <h2>Master Schedule</h2>
+                <div class="user-profile">Status: Optimized 🟢</div>
+            </header>
+
+            <div class="grid-container">
+                <div class="panel input-panel">
+                    <h3>Create Node</h3>
+                    <div class="form-group">
+                        <input type="text" id="taskTitle" placeholder="Task Designation">
+                    </div>
+                    <div class="form-row">
+                        <input type="time" id="taskTime">
+                        <select id="taskPriority">
+                            <option value="p1">P1 - Critical</option>
+                            <option value="p2">P2 - Standard</option>
+                            <option value="p3">P3 - Low</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="injectTask()">Initialize Task</button>
+                </div>
+
+                <div class="panel stats-panel">
+                    <h3>Efficiency Metrics</h3>
+                    <div class="circular-progress">
+                        <div class="inner-circle" id="completionRate">0%</div>
+                    </div>
+                    <p>Tasks Completed</p>
+                </div>
+
+                <div class="panel timeline-panel">
+                    <h3>Active Timeline</h3>
+                    <div class="timeline" id="timelineContainer">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
