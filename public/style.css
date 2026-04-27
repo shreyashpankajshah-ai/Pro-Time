@@ -213,3 +213,131 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 15px va
 
 .pro-completed { opacity: 0.5; filter: grayscale(80%); }
 .pro-completed:hover { opacity: 1; filter: grayscale(0%); }
+
+
+/* =========================================================
+   MOBILE COMPATIBILITY & AESTHETIC ENHANCEMENTS
+   ========================================================= */
+
+/* --- 1. Subtle Aesthetic Upgrades (Applies Everywhere) --- */
+.panel, .stat-card { 
+    /* Adds a subtle glassmorphic lighting effect to cards */
+    background: linear-gradient(145deg, rgba(35, 35, 45, 0.6), rgba(10, 10, 15, 0.8)); 
+}
+input::placeholder { 
+    color: rgba(255, 255, 255, 0.3); 
+    font-style: italic;
+}
+.sidebar {
+    box-shadow: 5px 0 30px rgba(0,0,0,0.3);
+}
+
+/* --- 2. Tablet Responsiveness --- */
+@media (max-width: 1024px) {
+    .grid-container { 
+        grid-template-columns: 1fr; /* Stacks the dashboard panels */
+    }
+}
+
+/* --- 3. Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    /* Main Layout Restructuring */
+    .dashboard { flex-direction: column; }
+    
+    /* Transform Sidebar into a Bottom App Navigation Bar */
+    .sidebar { 
+        width: 100%; 
+        height: auto; 
+        flex-direction: row; 
+        justify-content: space-around; 
+        padding: 0.8rem; 
+        border-right: none; 
+        border-top: 1px solid var(--border); 
+        order: 2; /* Pushes it to the bottom */
+        position: fixed; 
+        bottom: 0; 
+        left: 0;
+        background: rgba(10, 10, 12, 0.95);
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    }
+    .logo { display: none; } /* Hide text logo to save space */
+    .nav-links { 
+        flex-direction: row; 
+        gap: 0; 
+        width: 100%; 
+        justify-content: space-between; 
+    }
+    .nav-links li { 
+        padding: 0.5rem; 
+        font-size: 0.75rem; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        text-align: center; 
+    }
+    .nav-links li:hover, .nav-links li.active { 
+        transform: translateY(-3px); 
+        background: transparent;
+        color: var(--accent);
+    }
+
+    /* Adjust Content Area for Mobile */
+    .content { 
+        padding: 1rem; 
+        padding-bottom: 90px; /* Leaves room so bottom nav doesn't hide content */
+        order: 1; 
+    }
+
+    /* Top Navbar Adjustments */
+    .top-navbar { 
+        flex-direction: column; 
+        gap: 1rem; 
+        padding: 1rem;
+    }
+    .nav-search { width: 100%; }
+    .nav-search input { width: 100%; }
+    .nav-profile { 
+        width: 100%; 
+        justify-content: space-between; 
+    }
+
+    /* Stats Grid Adjustments */
+    .quick-stats { grid-template-columns: 1fr; gap: 1rem; }
+    .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .header h2 { font-size: 2rem; }
+
+    /* Pro Timeline Mobile Fix (Converts alternating sides to a sleek single column) */
+    .center-line { left: 20px; } /* Move glowing line to the left */
+    
+    .pro-timeline-item { 
+        width: calc(100% - 40px); /* Fill remaining space */
+        left: 40px !important; /* Align everything to the right of the line */
+        margin-bottom: 2rem; 
+    }
+    
+    /* Align all timeline dots to the left side of the cards */
+    .pro-timeline-item::after { 
+        left: -31px !important; 
+        right: auto !important; 
+        transform: translateY(-50%) !important; 
+    }
+    
+    /* Remove hover offset calculations for mobile */
+    .pro-timeline-left::after, .pro-timeline-right::after { --dot-x: 0; }
+    
+    /* Normalize borders for mobile items */
+    .pro-timeline-left, .pro-timeline-right { 
+        border-left: 4px solid transparent; 
+        border-right: 1px solid var(--border); 
+    }
+    .pro-timeline-left:hover, .pro-timeline-right:hover { 
+        border-left-color: var(--accent); 
+        border-right-color: var(--border);
+    }
+
+    /* Fix Preloader for small screens */
+    .loader-text span { font-size: 1.8rem; }
+    
+    /* Form inputs fix */
+    .form-row { flex-direction: column; gap: 1rem; }
+}
