@@ -1,39 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ProTime | Advanced Scheduler</title>
-    <link rel="stylesheet" href="style.css">
+
+    <script defer src="/__/firebase/12.12.1/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.12.1/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.12.1/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/12.12.1/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.12.1/firebase-init.js?useEmulator=true"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="loader" id="loader">
-        <h1 class="loader-text" id="loaderText">SYNCHRONIZING...</h1>
+        <div class="loader-text" id="loaderText">SYNCHRONIZING...</div>
     </div>
 
-    <main class="dashboard hidden" id="dashboard">
-        <nav class="sidebar">
-            <div class="logo">⚡ ProTime</div>
-            <ul class="nav-links">
-                <li class="active">📊 Dashboard</li>
-                <li>📅 Timeline</li>
-                <li>📈 Analytics</li>
-                <li>⚙️ Settings</li>
-            </ul>
-        </nav>
+    <div id="toastContainer" class="toast-container"></div>
 
-        <div class="content">
+    <div class="dashboard hidden" id="dashboard">
+        <aside class="sidebar">
+            <div class="logo">⚡ PROTIME</div>
+            <ul class="nav-links" id="navMenu">
+                <li class="active" data-target="dashboardView">📊 Dashboard</li>
+                <li data-target="timelineView">📅 Timeline</li>
+                <li data-target="analyticsView">📈 Analytics</li>
+                <li data-target="settingsView">⚙️ System Settings</li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <nav class="top-navbar">
+                <div class="nav-search">
+                    <input type="text" placeholder="Search parameters...">
+                </div>
+                <div class="nav-profile">
+                    <span id="systemClock" class="clock-display">00:00:00</span>
+                    <div class="user-badge">EOTE Workspace</div>
+                </div>
+            </nav>
+
             <header class="header">
-                <h2>Master Schedule</h2>
-                <div class="user-profile">Status: Optimized 🟢</div>
+                <h2 id="pageTitle">Master Schedule</h2>
+                <div id="status" class="status-badge">Status: Optimized 🟢</div>
             </header>
 
+            <div id="dashboardView" class="view-section">
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <h4>Total Nodes</h4>
+                        <h2 id="statTotal">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Completed</h4>
+                        <h2 id="statCompleted">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Pending</h4>
+                        <h2 id="statPending">0</h2>
+                    </div>
+                </div>
+
+                <div class="grid-container">
+                    <section class="panel">
+                        <h3>Create Node</h3>
+                        <div class="form-group">
+                            <input type="text" id="taskTitle" placeholder="Initialize Task Name...">
+                        </div>
+                        <div class="form-row">
+                            <input type="time" id="taskTime">
+                            <select id="taskPriority">
+                                <option value="p1">P1 - Critical</option>
+                                <option value="p2">P2 - Standard</option>
+                                <option value="p3">P3 - Low</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" onclick="injectTask()">Initialize Task</button>
+                    </section>
+
+                    <section class="panel">
+                        <h3>Efficiency Metrics</h3>
+                        <div class="circular-progress">
+                            <div class="inner-circle" id="completionRate">0%</div>
+                        </div>
+                        <p style="text-align: center; color: var(--text-muted); margin-top: 10px;">Tasks Completed</p>
+                    </section>
+
+                    <section class="panel timeline-panel">
+                        <h3>Active Timeline</h3>
+                        <div class="timeline" id="timelineContainer">
+                            </div>
+                    </section>
+                </div>
+            </div> <div id="timelineView" class="view-section" style="display: none; opacity: 0;">
+                <div class="full-timeline-wrapper">
+                    <div class="center-line"></div>
+                    <div id="proTimelineContainer">
+                        <div class="empty-state">No nodes initialized. Switch to Dashboard to create tasks.</div>
+                    </div>
+                </div>
+            </div> ```
+
             <div class="grid-container">
-                <div class="panel input-panel">
+                <section class="panel">
                     <h3>Create Node</h3>
                     <div class="form-group">
-                        <input type="text" id="taskTitle" placeholder="Task Designation">
+                        <input type="text" id="taskTitle" placeholder="Initialize Task Name...">
                     </div>
                     <div class="form-row">
                         <input type="time" id="taskTime">
@@ -44,24 +122,25 @@
                         </select>
                     </div>
                     <button class="btn-primary" onclick="injectTask()">Initialize Task</button>
-                </div>
+                </section>
 
-                <div class="panel stats-panel">
+                <section class="panel">
                     <h3>Efficiency Metrics</h3>
                     <div class="circular-progress">
                         <div class="inner-circle" id="completionRate">0%</div>
                     </div>
-                    <p>Tasks Completed</p>
-                </div>
+                    <p style="text-align: center; color: var(--text-muted); margin-top: 10px;">Tasks Completed</p>
+                </section>
 
-                <div class="panel timeline-panel">
+                <section class="panel timeline-panel">
                     <h3>Active Timeline</h3>
                     <div class="timeline" id="timelineContainer">
                         </div>
-                </div>
+                </section>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
